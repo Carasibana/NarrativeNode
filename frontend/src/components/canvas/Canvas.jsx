@@ -2357,6 +2357,26 @@ function CanvasInner() {
     return true
   }, [])
 
+  // React Flow error handler, hoisted to a STABLE reference. `onError` is one of
+  // React Flow's tracked store fields (reactFlowFieldsToTrack); passing a fresh
+  // inline arrow every render makes StoreUpdater re-sync it into the store on every
+  // commit, which snowballs into a "maximum update depth exceeded" loop during
+  // high-frequency re-render moments such as dragging a wire into a scene. A
+  // useCallback keeps the reference stable so StoreUpdater syncs it once.
+  const handleReactFlowError = useCallback((code, message) => {
+    // React Flow error 008 ("couldn't create edge for target handle") fires
+    // transiently when an edge is added one frame before its target chip/POV
+    // handle mounts (e.g. an MCP chip/POV insert). The edge renders correctly on
+    // the next frame and a fresh load from disk produces none, so it is benign.
+    // Keep it visible in dev for debugging, but silence the noise in production.
+    // Every other code falls through to React Flow's normal console.warn.
+    if (code === '008') {
+      if (import.meta.env.DEV) console.debug(`[ReactFlow] ${code}: ${message}`)
+      return
+    }
+    console.warn(`[ReactFlow] ${code}: ${message}`)
+  }, [])
+
   // Open delete dialog for an entity origin node (from context menu)
   const handleEntityNodeDelete = useCallback((nodeId) => {
     const node = nodes.find((n) => n.id === nodeId)
@@ -2417,20 +2437,7 @@ function CanvasInner() {
       <ReactFlow
         nodes={displayNodes}
         edges={displayEdges}
-        onError={(code, message) => {
-          // React Flow error 008 ("couldn't create edge for target handle")
-          // fires transiently when an edge is added one frame before its
-          // target chip/POV handle mounts (e.g. an MCP chip/POV insert). The
-          // edge renders correctly on the next frame and a fresh load from
-          // disk produces none, so it is benign. Keep it visible in dev for
-          // debugging, but silence the noise in production. Every other code
-          // falls through to React Flow's normal console.warn.
-          if (code === '008') {
-            if (import.meta.env.DEV) console.debug(`[ReactFlow] ${code}: ${message}`)
-            return
-          }
-          console.warn(`[ReactFlow] ${code}: ${message}`)
-        }}
+        onError={handleReactFlowError}
         multiSelectionKeyCode={['Control', 'Meta']}
         onNodesChange={handleNodesChange}
         onEdgesChange={onEdgesChange}
