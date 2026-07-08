@@ -3,18 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A visual, node-based plot planner for writers.">
+<meta name="description" content="A free visual plot planner and story outliner for writers. Map your story as a canvas of connected scenes and track characters, locations, items, and POV across the whole narrative.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://carasibana.github.io/NarrativeNode/">
-<meta property="og:title" content="NarrativeNode - The Plot Planner">
-<meta property="og:description" content="A visual, node-based plot planner for writers. Lay your story out as a canvas of connected scenes.">
+<meta property="og:title" content="NarrativeNode - Visual Plot Planner for Writers">
+<meta property="og:description" content="A free visual plot planner and story outliner for writers. Map your story as a canvas of connected scenes and track characters, locations, items, and POV across the whole narrative.">
 <meta property="og:image" content="https://carasibana.github.io/NarrativeNode/social-preview.png">
+<meta property="og:image:alt" content="NarrativeNode: a visual plot planner for writers, shown as a canvas of connected scene nodes.">
+<meta property="og:site_name" content="NarrativeNode">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NarrativeNode - Visual Plot Planner for Writers">
+<meta name="twitter:description" content="A free visual plot planner and story outliner for writers. Map your story as a canvas of connected scenes and track characters, locations, items, and POV across the whole narrative.">
+<meta name="twitter:image" content="https://carasibana.github.io/NarrativeNode/social-preview.png">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" sizes="256x256" href="favicon-256.png">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>NarrativeNode - The Plot Planner</title>
+<link rel="canonical" href="https://carasibana.github.io/NarrativeNode/">
+<title>NarrativeNode - Visual Plot Planner for Writers</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "NarrativeNode",
+  "applicationCategory": "Writing software",
+  "operatingSystem": "Windows, macOS, Linux",
+  "url": "https://carasibana.github.io/NarrativeNode/",
+  "downloadUrl": "https://github.com/Carasibana/NarrativeNode/releases/latest",
+  "softwareVersion": "1.0.0.0",
+  "image": "https://carasibana.github.io/NarrativeNode/social-preview.png",
+  "description": "A free visual plot planner and story outliner for writers. Map your story as a canvas of connected scenes and track characters, locations, items, and POV across the whole narrative.",
+  "author": { "@type": "Person", "name": "Carasibana" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
 <style>
   :root {
     --bg:#ffffff; --surface:#faf7ff; --text:#211838; --muted:#6a5a8b; --accent:#7c3aed;
@@ -46,6 +68,9 @@
     transition:transform .12s ease; }
   .cta:hover { transform:translateY(-2px); }
   .cta svg { width:20px; height:20px; }
+  .cta-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .cta.ghost { background:transparent; color:#fff; box-shadow:none; border:1.5px solid rgba(255,255,255,.55); }
+  .cta.ghost:hover { border-color:#fff; }
   .free { margin-top:16px; font-size:13.5px; color:#cdb9f7; }
 
   /* Content */
@@ -90,10 +115,16 @@
     <h1>NarrativeNode</h1>
     <p class="tag">The Plot Planner</p>
     <p>A visual, node-based plot planner for writers. Lay your story out as a canvas of connected scenes, and track how every character, location, item, and point of view changes across the whole narrative.</p>
-    <a class="cta" href="https://github.com/Carasibana/NarrativeNode">
-      <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
-      View on GitHub
-    </a>
+    <div class="cta-row">
+      <a class="cta" href="https://github.com/Carasibana/NarrativeNode/releases/latest">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1a.75.75 0 01.75.75v6.44l1.97-1.97a.75.75 0 111.06 1.06l-3.25 3.25a.75.75 0 01-1.06 0L4.22 7.28a.75.75 0 111.06-1.06l1.97 1.97V1.75A.75.75 0 018 1z"></path><path d="M2.75 10a.75.75 0 01.75.75v2.5c0 .14.11.25.25.25h8.5a.25.25 0 00.25-.25v-2.5a.75.75 0 011.5 0v2.5A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25v-2.5A.75.75 0 012.75 10z"></path></svg>
+        Download
+      </a>
+      <a class="cta ghost" href="https://github.com/Carasibana/NarrativeNode">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+        View on GitHub
+      </a>
+    </div>
     <div class="free">Free for personal use &middot; Windows / macOS / Linux</div>
   </div>
 </section>
