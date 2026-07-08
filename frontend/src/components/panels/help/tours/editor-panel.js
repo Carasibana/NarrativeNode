@@ -1,0 +1,58 @@
+// AUTO-GENERATED help tour (Phase 6.1) from the help capture manifest.
+// Surface: editor-panel. Regions are measured from the capture; prose merges from
+// help-prose.json (Phase 6.2a) and falls back to placeholder where unauthored.
+// The screenshot is referenced by FILENAME and resolved at runtime in
+// helpTours.js, so a missing / renamed / retired image shows the placeholder
+// instead of breaking the Vite build with an unresolved static import.
+
+export const tour = {
+  id: "editor-panel",
+  category: "Library & Editor",
+  tier: "element-detail",
+  parent: "dock",
+  order: 1,
+  title: "Editor Panel",
+  intro: "The editor is the right sidebar, where you write a scene's actual prose. A formatting toolbar runs across the top with the usual rich-text controls plus a few writing aids: highlighting the names of your story's entities, finding and replacing text, and a clean light reading view. The scene's short description sits between the toolbar and the writing area, and the word and character counts and a zoom control sit along the foot. The editor follows whichever scene you select on the canvas unless you pin it.",
+  screenshotFile: "editor-panel.webp",
+  screenshotAlt: "Editor Panel screenshot.",
+  sections: [
+    { id: "header", label: "Header", region: { x: 0.25, y: 0, w: 99.75, h: 3.72 }, body: "Names the scene you are currently writing and holds the editor's panel controls: pinning, the description toggle, and the close button." },
+    { id: "scene_description_toggle", label: "Prose or description", region: { x: 72.53, y: 0.65, w: 20.61, h: 2.32 }, body: "Shows or hides the scene's short description area beneath the toolbar, so you can switch between writing the full prose and noting what the scene is about." },
+    { id: "pin_scene", label: "Pin scene", region: { x: 17.29, y: 0.94, w: 4.5, h: 1.74 }, body: "Pins the editor to this scene so it stays open even as you click other things on the canvas. Without a pin, selecting a different scene switches the editor to that scene's prose; pin when you want to keep writing one scene while exploring the rest of the story." },
+    { id: "close", label: "Close", region: { x: 94.14, y: 1.14, w: 2.86, h: 1.35 }, body: "Closes the editor panel." },
+    { id: "toolbar", label: "Toolbar", region: { x: 0.25, y: 3.72, w: 99.75, h: 8.31 }, body: "The formatting toolbar for the scene's prose: headings, font and size, inline styles and colours, alignment, lists and blocks, undo and redo, and the writing aids for name highlighting, find and replace, and the light reading view." },
+    { id: "heading_1", label: "Heading 1", region: { x: 2.25, y: 4.11, w: 6.75, h: 2.32 }, body: "Formats the current line as a top-level heading." },
+    { id: "heading_2", label: "Heading 2", region: { x: 9.5, y: 4.11, w: 6.75, h: 2.32 }, body: "Formats the current line as a second-level heading." },
+    { id: "heading_3", label: "Heading 3", region: { x: 16.75, y: 4.11, w: 6.75, h: 2.32 }, body: "Formats the current line as a third-level heading." },
+    { id: "font_family", label: "Font", region: { x: 26.75, y: 4.11, w: 22.5, h: 2.32 }, body: "Chooses the typeface used to display the prose in the editor." },
+    { id: "font_size", label: "Text size", region: { x: 49.75, y: 4.11, w: 17.5, h: 2.32 }, body: "Chooses the size of the selected text." },
+    { id: "light_mode", label: "Light view", region: { x: 81.87, y: 4.11, w: 7, h: 2.32 }, body: "Switches the writing area to a light, page-like reading view, which some writers find easier on the eyes for reading prose back. It changes only how the editor looks to you and does not alter the saved text." },
+    { id: "highlight_names", label: "Highlight names", region: { x: 89.37, y: 4.11, w: 8.63, h: 2.32 }, body: "Tints the names of your story's entities wherever they appear in the prose, so you can see at a glance who and what a scene mentions. Use the small arrow to choose which kinds of entity get highlighted. This is a reading aid only and does not change the text." },
+    { id: "text_colour", label: "Text colour", region: { x: 25.38, y: 6.62, w: 5.11, h: 2.42 }, body: "Sets the colour of the selected text from a small palette.", link: "colour-picker" },
+    { id: "highlight_colour", label: "Highlight colour", region: { x: 30.99, y: 6.62, w: 5.3, h: 2.42 }, body: "Applies a highlight colour behind the selected text from a small palette.", link: "colour-picker" },
+    { id: "bold", label: "Bold", region: { x: 2.25, y: 6.67, w: 4.93, h: 2.32 }, body: "Makes the selected text bold." },
+    { id: "italic", label: "Italic", region: { x: 7.68, y: 6.67, w: 3.8, h: 2.32 }, body: "Makes the selected text italic." },
+    { id: "underline", label: "Underline", region: { x: 11.98, y: 6.67, w: 5.06, h: 2.32 }, body: "Underlines the selected text." },
+    { id: "strikethrough", label: "Strikethrough", region: { x: 17.54, y: 6.67, w: 4.59, h: 2.32 }, body: "Strikes a line through the selected text." },
+    { id: "align_left", label: "Align left", region: { x: 39.54, y: 6.76, w: 6.5, h: 2.13 }, body: "Aligns the paragraph to the left margin." },
+    { id: "align_centre", label: "Centre", region: { x: 46.54, y: 6.76, w: 6.5, h: 2.13 }, body: "Centres the paragraph between the margins." },
+    { id: "align_right", label: "Align right", region: { x: 53.54, y: 6.76, w: 6.5, h: 2.13 }, body: "Aligns the paragraph to the right margin." },
+    { id: "align_justify", label: "Justify", region: { x: 60.54, y: 6.76, w: 6.5, h: 2.13 }, body: "Stretches the paragraph to sit flush against both margins." },
+    { id: "bullet_list", label: "Bulleted list", region: { x: 19, y: 9.23, w: 9.47, h: 2.32 }, body: "Turns the selected lines into a bulleted list." },
+    { id: "numbered_list", label: "Numbered list", region: { x: 28.97, y: 9.23, w: 10.52, h: 2.32 }, body: "Turns the selected lines into a numbered list." },
+    { id: "blockquote", label: "Block quote", region: { x: 42.74, y: 9.23, w: 13.26, h: 2.32 }, body: "Sets the selected text off as an indented block quote." },
+    { id: "code_block", label: "Code block", region: { x: 56.5, y: 9.23, w: 8.27, h: 2.32 }, body: "Formats the selected text as a fixed-width code block." },
+    { id: "horizontal_rule", label: "Divider", region: { x: 65.27, y: 9.23, w: 6, h: 2.32 }, body: "Inserts a horizontal divider line, useful for marking a break between passages within a scene." },
+    { id: "undo", label: "Undo", region: { x: 2.25, y: 9.32, w: 6.5, h: 2.13 }, body: "Undoes your last edit in the prose." },
+    { id: "redo", label: "Redo", region: { x: 9.25, y: 9.32, w: 6.5, h: 2.13 }, body: "Redoes the edit you just undid." },
+    { id: "insert_section", label: "Insert section", region: { x: 74.52, y: 9.32, w: 6.5, h: 2.13 }, body: "Inserts a section: a labelled block inside the scene's prose that you can treat as a unit, for instance to draft, summarize, or hand a passage to the AI on its own. Use it to break a long scene into named parts you can work on separately.", link: "editor-section" },
+    { id: "inline_prompt_block", label: "Inline prompt block", region: { x: 81.52, y: 9.32, w: 5.5, h: 2.13 }, body: "Drops a prompt block right where the cursor sits, so you can ask the AI to draft prose at that exact point in the scene and have its reply land in place. Once a block is present this same button dismisses it, or stops its response while it is still being written.", link: "prompt-block-form" },
+    { id: "find_replace", label: "Find and replace", region: { x: 90.27, y: 9.32, w: 6.5, h: 2.13 }, body: "Opens a panel to search the scene's prose and, if you wish, replace matches with new text. Handy for renaming or rewording something consistently across a scene. The shortcut is Ctrl+Shift+H.", link: "find-replace" },
+    { id: "content", label: "Writing area", region: { x: 0.25, y: 12.03, w: 99.75, h: 85.65 }, body: "The main area where you write the scene's prose. This is the scene's actual narrative text, the words a reader would read; it saves automatically as you type. Right-click here for the insert-section and prompt-block options." },
+    { id: "footer", label: "Footer", region: { x: 0.25, y: 97.68, w: 99.75, h: 2.32 }, body: "The bar across the bottom of the editor, holding the word and character counts and the zoom control." },
+    { id: "word_count", label: "Word count", region: { x: 3.25, y: 98.16, w: 10.06, h: 1.45 }, body: "The number of words in the scene's prose, updating as you write." },
+    { id: "character_count", label: "Character count", region: { x: 16.31, y: 98.16, w: 15.95, h: 1.45 }, body: "The number of characters in the scene's prose, updating as you write." },
+    { id: "zoom_reset", label: "Reset zoom", region: { x: 93.04, y: 98.21, w: 3.96, h: 1.35 }, body: "Returns the editor zoom to its default level." },
+    { id: "zoom_slider", label: "Zoom", region: { x: 57.04, y: 98.31, w: 24, h: 1.16 }, body: "Scales the editor's text up or down for comfortable reading, without changing the saved prose. Adjusts in steps between 50% and 200%." },
+  ],
+}

@@ -1,0 +1,66 @@
+fastapi==0.136.1
+uvicorn[standard]==0.47.0
+# ── Phase 2.1 — MCP Python SDK ─────────────────────────────────────
+# Anthropic's official Model Context Protocol SDK, used to expose
+# NarrativeNode's tool surface to MCP-aware clients (Claude Desktop,
+# etc.). Mounted as a sub-app on the existing FastAPI app at /mcp.
+# Tool implementations are thin proxies that forward over the
+# WebSocket bridge in `routers/mcp_bridge.py` to the running frontend,
+# where the existing chain-aware Zustand actions handle the call.
+#
+# License: MIT (Anthropic / modelcontextprotocol/python-sdk).
+# Pulls in starlette 1.0.0 (transitively, via sse-starlette) and
+# bumps uvicorn — hence the FastAPI 0.115 → 0.136 jump above.
+mcp==1.27.1
+pydantic>=2.10.0,<3.0.0
+python-multipart==0.0.12
+aiofiles==24.1.0
+# ── Phase 1.12a Track 6 — PDF export renderer ──────────────────────
+# ReportLab is a pure-Python PDF generation library used by
+# backend/services/renderers/pdf.py. Self-contained — no system
+# library dependencies — trivial Windows install. `pillow` and
+# `charset-normalizer` come in as transitive deps.
+reportlab>=4.0,<5.0
+# ── Phase 1.12a Track 7 — Microsoft Word (.docx) export renderer ───
+# python-docx is a pure-Python library for generating Office Open
+# XML (.docx) documents, used by backend/services/renderers/docx.py.
+# MIT-licensed. The `.docx` format itself is ECMA-376 / ISO/IEC 29500
+# standardised and published under Microsoft's Open Specification
+# Promise — no legal concerns with generating them. `lxml` comes in
+# as a transitive dependency.
+python-docx>=1.1,<2.0
+# ── Phase 1.25c — SVG → PNG rasterisation for export iconography ───
+# resvg-py wraps the Linebender / RazrFalcon `resvg` Rust crate via
+# PyO3. Used by `services.export_icons.svg_to_png_bytes` to convert
+# the season + time-of-day SVG strings the frontend ships into PNGs
+# that the PDF and DOCX renderers embed inline. Wheels bundle the
+# native binary directly so no compile step.
+#
+# License: resvg-py itself MIT (see wheel LICENSE file). Wraps the
+# upstream `resvg` Rust crate, which is dual-licensed Apache-2.0 OR
+# MIT. End-to-end permissive — no LGPL / GPL transitive.
+resvg-py>=0.3,<0.4
+# ── Phase 4.4b — API key storage in the OS keychain ────────────────
+# keyring stores each AI provider profile's API key in the operating
+# system's secret store (Windows Credential Manager / macOS Keychain /
+# Linux Secret Service) instead of plaintext on disk. Wired up in
+# Phase 4.4b (services/ai_provider_profiles_service).
+#
+# License: MIT. Transitive deps all permissive: pywin32-ctypes (the
+# Windows backend) BSD-3-Clause; jaraco.classes / jaraco.functools /
+# jaraco.context MIT; importlib_metadata Apache-2.0 (Python < 3.12 only).
+# Linux-only SecretStorage (BSD-3-Clause) + jeepney (MIT) aren't
+# installed on Windows / macOS.
+keyring>=25.0,<26.0
+# ── Phase 5.8b — markdown rendering in free-form export text fields ─
+# markdown-it-py converts markdown a writer types into free-form text
+# fields (entity / relationship / knowledge descriptions, text-type
+# attribute values, notes, circumstance / motivator / perspective
+# bodies, scene descriptions) into HTML, which each export renderer
+# then renders via its existing HTML-to-format parser. Same
+# CommonMark / GFM family as the frontend's `marked`, so exports match
+# the in-app rendering. See `services/markdown_fields.py`.
+#
+# License: MIT. Sole transitive dependency mdurl is also MIT (pip
+# installs it automatically). End-to-end permissive.
+markdown-it-py>=4.0,<5.0

@@ -1,0 +1,1769 @@
+@import "tailwindcss";
+
+/*
+ * Accent colour palette — currently mapped to Tailwind purple.
+ * To retheme the app, swap these hex values (or hook them to CSS custom
+ * properties when the Phase 1.13 preferences system is built).
+ * All new components should use `accent-*` utilities, not `purple-*`.
+ */
+@theme {
+  --color-accent-50:  #faf5ff;
+  --color-accent-100: #f3e8ff;
+  --color-accent-200: #e9d5ff;
+  --color-accent-300: #d8b4fe;
+  --color-accent-400: #c084fc;
+  --color-accent-500: #a855f7;
+  --color-accent-600: #9333ea;
+  --color-accent-700: #7c3aed;
+  --color-accent-800: #6b21a8;
+  --color-accent-900: #581c87;
+  --color-accent-950: #3b0764;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* `color-scheme: dark` tells the browser to render native UI
+ * elements (scrollbars, form controls, autofill backgrounds, etc.)
+ * in dark mode instead of the default light theme. Without this,
+ * Chrome / Edge render scrollbars in a bright light-mode style
+ * that clashes with the rest of the dark UI. Firefox respects the
+ * same hint. */
+:root {
+  color-scheme: dark;
+}
+
+/* Cross-browser scrollbar polish. Chrome / Webkit honour the
+ * `::-webkit-scrollbar-*` selectors; Firefox honours
+ * `scrollbar-color` + `scrollbar-width` on every element. Both
+ * render compact, muted scrollbars that blend with the zinc panel
+ * surfaces, AND stay invisible until the writer hovers the
+ * scrollable area — matching Firefox's auto-hide overlay style on
+ * Chrome too. The track stays transparent at all times; only the
+ * thumb fades in / out on hover. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.2s ease;
+}
+*:hover::-webkit-scrollbar-thumb {
+  background: rgba(63, 63, 70, 0.7); /* zinc-700 / 70% */
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+*:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(82, 82, 91, 0.9); /* zinc-600 / 90% */
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+* {
+  /* Firefox: same colour for the thumb; track is transparent.
+   * `scrollbar-width: thin` matches Webkit's 10px sizing. */
+  scrollbar-color: rgba(63, 63, 70, 0.7) transparent;
+  scrollbar-width: thin;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  background: #0f0f13;
+  color: #e2e0e8;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── TipTap editor styles ─────────────────────────────────────────────────── */
+
+.nn-tiptap-content {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #d4d4d8; /* zinc-300 */
+}
+
+.nn-tiptap-content p {
+  margin: 0.5em 0;
+}
+
+.nn-tiptap-content p:first-child {
+  margin-top: 0;
+}
+
+.nn-tiptap-content h1,
+.nn-tiptap-content h2,
+.nn-tiptap-content h3 {
+  color: #f4f4f5; /* zinc-100 */
+  font-weight: 600;
+  margin: 1em 0 0.4em;
+}
+
+.nn-tiptap-content h1 { font-size: 1.5em; }
+.nn-tiptap-content h2 { font-size: 1.25em; }
+.nn-tiptap-content h3 { font-size: 1.1em; }
+
+.nn-tiptap-content ul,
+.nn-tiptap-content ol {
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+.nn-tiptap-content li {
+  margin: 0.2em 0;
+}
+
+.nn-tiptap-content ul > li {
+  list-style-type: disc;
+}
+
+.nn-tiptap-content ol > li {
+  list-style-type: decimal;
+}
+
+.nn-tiptap-content blockquote {
+  border-left: 3px solid var(--color-accent-700);
+  padding-left: 1em;
+  margin: 0.5em 0;
+  color: #a1a1aa; /* zinc-400 */
+  font-style: italic;
+}
+
+.nn-tiptap-content pre {
+  background: #18181b; /* zinc-900 */
+  border: 1px solid #3f3f46; /* zinc-700 */
+  border-radius: 4px;
+  padding: 0.75em 1em;
+  margin: 0.5em 0;
+  overflow-x: auto;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.9em;
+  color: #e4e4e7; /* zinc-200 */
+}
+
+.nn-tiptap-content code {
+  background: #27272a; /* zinc-800 */
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+.nn-tiptap-content pre code {
+  background: none;
+  padding: 0;
+}
+
+.nn-tiptap-content hr {
+  border: none;
+  border-top: 1px solid #3f3f46; /* zinc-700 */
+  margin: 1em 0;
+}
+
+.nn-tiptap-content strong {
+  font-weight: 700;
+  color: inherit;
+}
+
+.nn-tiptap-content em {
+  font-style: italic;
+}
+
+.nn-tiptap-content s {
+  text-decoration: line-through;
+  color: #71717a; /* zinc-500 */
+}
+
+.nn-tiptap-content u {
+  text-decoration: underline;
+}
+
+.nn-tiptap-content mark {
+  border-radius: 3px;
+  padding: 0.1em 0.2em;
+  color: inherit;
+}
+
+.nn-tiptap-content a,
+.nn-tiptap-content .nn-tiptap-link {
+  color: var(--color-accent-700);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.nn-tiptap-content a:hover,
+.nn-tiptap-content .nn-tiptap-link:hover {
+  color: #a78bfa;
+}
+
+/* Placeholder when editor is empty */
+.nn-tiptap-content.is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #52525b; /* zinc-600 */
+  pointer-events: none;
+  height: 0;
+}
+
+/* Light mode for TipTap editor */
+.nn-tiptap-light {
+  background-color: #f4f4f5; /* zinc-100 */
+}
+
+.nn-tiptap-light .nn-tiptap-content {
+  color: #27272a; /* zinc-800 */
+}
+
+.nn-tiptap-light .nn-tiptap-content h1,
+.nn-tiptap-light .nn-tiptap-content h2,
+.nn-tiptap-light .nn-tiptap-content h3 {
+  color: #18181b; /* zinc-900 */
+}
+
+.nn-tiptap-light .nn-tiptap-content strong {
+  color: inherit;
+}
+
+.nn-tiptap-light .nn-tiptap-content s {
+  color: #a1a1aa; /* zinc-400 */
+}
+
+.nn-tiptap-light .nn-tiptap-content blockquote {
+  color: #52525b; /* zinc-600 */
+}
+
+.nn-tiptap-light .nn-tiptap-content pre {
+  background: #e4e4e7; /* zinc-200 */
+  border-color: #d4d4d8; /* zinc-300 */
+  color: #27272a;
+}
+
+.nn-tiptap-light .nn-tiptap-content code {
+  background: #e4e4e7;
+}
+
+.nn-tiptap-light .nn-tiptap-content hr {
+  border-top-color: #d4d4d8;
+}
+
+.nn-tiptap-light .nn-tiptap-content.is-empty::before {
+  color: #a1a1aa;
+}
+
+/* Entity name highlight decorations */
+.nn-entity-highlight {
+  font-weight: 600;
+  border-radius: 2px;
+  padding: 0 1px;
+  transition: background-color 0.15s;
+}
+
+.nn-entity-highlight:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Phase 1.24c — Find / Replace match decorations.
+   `current` mimics a normal text selection so the stepped-to match
+   reads as if drag-selected, regardless of where focus actually is.
+   `other` is a subtler tint so additional matches are visible.
+   Tint derives from the story's accent palette via `color-mix` so it
+   tracks the writer's chosen accent rather than a hard-coded blue. */
+.nn-find-match-current {
+  background-color: color-mix(in srgb, var(--color-accent-500) 55%, transparent);
+  color: #ffffff;
+  border-radius: 2px;
+}
+.nn-find-match-other {
+  background-color: color-mix(in srgb, var(--color-accent-500) 18%, transparent);
+  border-radius: 2px;
+}
+
+.nn-tiptap-content {
+  tab-size: 4;
+  -moz-tab-size: 4;
+}
+
+/* Phase 2.9a — Section UI chrome.
+   Four-row layout: name bar + drag handle / Prompt Block Header
+   (collapsed-by-default placeholder until 2.9c) / Section action
+   toolbar / content area. Wrapped by a story-accent border. */
+.nn-section {
+  border: 1px solid var(--color-accent-500);
+  border-radius: 4px;
+  background-color: rgba(24, 24, 27, 0.4); /* zinc-900 / 40% */
+  margin: 0.75rem 0;
+  overflow: hidden;
+}
+
+.nn-section-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.nn-section-namebar {
+  border-bottom: 1px solid rgba(63, 63, 70, 0.6); /* zinc-700 / 60% */
+  background-color: rgba(39, 39, 42, 0.5); /* zinc-800 / 50% */
+}
+
+.nn-section-drag-handle {
+  cursor: grab;
+  user-select: none;
+  color: #71717a; /* zinc-500 */
+  font-size: 0.875rem;
+  line-height: 1;
+  padding: 0 2px;
+}
+.nn-section-drag-handle:hover {
+  color: #d4d4d8; /* zinc-300 */
+}
+.nn-section-drag-handle:active {
+  cursor: grabbing;
+}
+
+.nn-section-name {
+  background: transparent;
+  border: none;
+  color: #e4e4e7; /* zinc-200 */
+  font-weight: 600;
+  cursor: text;
+  padding: 2px 4px;
+  border-radius: 2px;
+  text-align: left;
+  font-size: inherit;
+}
+.nn-section-name:hover {
+  background-color: rgba(63, 63, 70, 0.6); /* zinc-700 / 60% */
+}
+
+.nn-section-name-input {
+  background-color: rgba(24, 24, 27, 0.8); /* zinc-900 */
+  border: 1px solid var(--color-accent-500);
+  color: #e4e4e7;
+  font-weight: 600;
+  font-size: inherit;
+  padding: 2px 4px;
+  border-radius: 2px;
+  min-width: 8rem;
+  outline: none;
+}
+
+.nn-section-pbh-placeholder {
+  border-bottom: 1px solid rgba(63, 63, 70, 0.4);
+  background-color: rgba(39, 39, 42, 0.25);
+  color: #71717a; /* zinc-500 */
+  font-style: italic;
+  user-select: none;
+}
+.nn-section-pbh-caret {
+  color: #52525b; /* zinc-600 */
+}
+.nn-section-pbh-label {
+  color: #a1a1aa; /* zinc-400 */
+  font-style: normal;
+}
+.nn-section-pbh-stub-note {
+  margin-left: auto;
+  font-size: 0.6875rem;
+  color: #52525b; /* zinc-600 */
+}
+
+/* Phase 2.9c — PromptBlockForm shared component.
+ * Used for both the Prompt Block Header (PBH — rendered inside every
+ * Section UI's persistent header row) and the Inline Prompt Block
+ * (IPB — wrapped in floating chrome, item 2). Three display states:
+ * collapsed-idle (small bar), collapsed-streaming (PBH = thin
+ * single-line row with status indicator; IPB = inverted-teardrop
+ * pin, item 2), expanded (full form, dynamic width).
+ */
+.nn-pbf {
+  font-size: 0.75rem;
+  /* Fill the full Section row width. The parent `.nn-section-row` is
+   * `display: flex; align-items: center` which would otherwise collapse
+   * the form to its natural width; explicit width + flex:1 stretches
+   * it to the row's available horizontal space. */
+  width: 100%;
+  flex: 1;
+}
+
+/* Phase 2.9c item 7 — library-drag drop overlay.
+ *
+ * `.nn-pbf-expanded` is the wrapper drawn around the expanded form
+ * (matches `.nn-pbf nn-pbf-expanded`). `position: relative` anchors
+ * the absolute-positioned drop overlay to it. Idle state (library
+ * drag in window but pointer NOT over the form yet): faint outline +
+ * faint tint so the writer sees WHERE the form is. Active state
+ * (`.is-active`, pointer over the form): stronger outline + tint +
+ * label hint changes to "Drop to attach". */
+.nn-pbf-expanded,
+.nn-pbf-collapsed {
+  /* Anchor for the absolute-positioned drop overlay. Both layouts
+   * carry the overlay so the writer can drop on the collapsed bar
+   * without expanding first (auto-expands on drop). */
+  position: relative;
+}
+.nn-pbf-drop-overlay {
+  position: absolute;
+  inset: -2px;
+  z-index: 12;
+  border: 1.5px dashed var(--color-accent-500, #a78bfa);
+  background-color: color-mix(in srgb, var(--color-accent-500, #a78bfa) 12%, transparent);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: background-color 80ms ease, border-width 80ms ease;
+}
+.nn-pbf-drop-overlay.is-active {
+  border-width: 2px;
+  background-color: color-mix(in srgb, var(--color-accent-500, #a78bfa) 28%, transparent);
+}
+.nn-pbf-drop-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background-color: rgba(24, 24, 27, 0.88);
+  color: var(--color-accent-300, #c4b5fd);
+  border: 1px solid var(--color-accent-500, #a78bfa);
+}
+
+/* Hide the editor's drop-cursor (ProseMirror's prose-insertion-point
+ * preview line) while a library item is being dragged. The drop
+ * cursor's "where will this land if I drop here" preview is
+ * meaningful for Section drag-handle moves (insertion between blocks)
+ * but library items don't get inserted into prose at all — they pin
+ * as context on the Prompt Block — so showing it just confuses the
+ * drop target. Body class is toggled by `PromptBlockForm`'s
+ * document-level dragenter / dragleave listeners.
+ *
+ * The `prosemirror-dropcursor` package toggles one of two classes on
+ * the cursor element: `.prosemirror-dropcursor-block` (between block
+ * boundaries) or `.prosemirror-dropcursor-inline` (within a block).
+ * Target both. `.ProseMirror-dropcursor` (capitalised) is the
+ * historical TipTap class name we kept around for older builds. */
+body.nn-library-drag-in-flight .prosemirror-dropcursor-block,
+body.nn-library-drag-in-flight .prosemirror-dropcursor-inline,
+body.nn-library-drag-in-flight .ProseMirror-dropcursor {
+  display: none !important;
+}
+
+.nn-pbf-collapsed {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+.nn-pbf-collapsed-bar {
+  flex: 1;
+  /* `min-width: 0` is required so this flex item can shrink BELOW
+   * its intrinsic content width and let the label's text-overflow:
+   * ellipsis kick in. Without it, the bar grows to fit the entire
+   * preview text, pushes the inline Write button off the right
+   * edge of the row, and there's no truncation. Same trick the
+   * Tailwind class `min-w-0` exists for. */
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.125rem 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: #a1a1aa; /* zinc-400 */
+  font-size: 0.75rem;
+  overflow: hidden;
+}
+.nn-pbf-collapsed-bar:hover {
+  background-color: rgba(63, 63, 70, 0.3);
+  color: #e4e4e7; /* zinc-200 */
+}
+/* Inline Write / Stop button on the right edge of the collapsed
+ * PBH row. Lets the writer re-fire the prompt currently in the
+ * form (shown as a preview on the bar) without expanding it. Small
+ * footprint matches the row's compact height; idle variant uses
+ * the accent palette; streaming variant uses the same red-tinted
+ * media-stop styling as the expanded form's Stop button. */
+.nn-pbf-collapsed-send {
+  flex-shrink: 0;
+  align-self: center;
+  margin-right: 0.25rem;
+  padding: 2px 8px;
+  min-height: 20px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 500;
+  /* Track the story accent palette via the same CSS custom-property
+   * variables the expanded form's Send button uses (`.nn-pbf-send-btn`).
+   * Hardcoded fallback values match the @theme block defaults so the
+   * button stays visible if the custom properties haven't resolved
+   * yet. Per-story overrides via `useAccentColor` flow through. */
+  background-color: var(--color-accent-700, #7c3aed);
+  color: #ffffff;
+  border: 1px solid var(--color-accent-500, #a855f7);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.12s, opacity 0.12s;
+  white-space: nowrap;
+}
+.nn-pbf-collapsed-send:hover:not(:disabled) {
+  background-color: var(--color-accent-600, #9333ea);
+}
+.nn-pbf-collapsed-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.nn-pbf-collapsed-stop {
+  background-color: rgba(127, 29, 29, 0.5); /* red-900 / 50% */
+  border-color: rgba(153, 27, 27, 0.6); /* red-800 / 60% */
+  color: #fee2e2; /* red-100 */
+}
+.nn-pbf-collapsed-stop:hover {
+  background-color: rgba(153, 27, 27, 0.6);
+}
+
+/* IPB cursor-mode context-window toggle pills (Phase 2.9c item 4
+ * refinement). Live inside `.nn-pbf-context-strip` next to the
+ * collapse caret. Two states: ON = solid accent fill; OFF = outline
+ * only (transparent fill, accent border). Tracks the story accent
+ * via `var(--color-accent-*)` so per-story overrides flow through.
+ * Disabled while streaming so toggle state can't change mid-write. */
+/* Phase 2.9d v0.2.9.42 — Active Scene chip row. Surfaces at the top
+ * of the prompt-block context strip when Scene Context is toggled on
+ * AND the host scene is known. Visually separated from the section /
+ * pinned / before-after pill row below via its own row + a smaller
+ * "ACTIVE SCENE:" label. Phrasing differs from the chat composer's
+ * "Current Scene:" — Prompt Blocks are always tied to the editor's
+ * active scene (the scene doesn't shift mid-block as it can in the
+ * chat panel, where a single conversation can persist across scene
+ * navigation). */
+.nn-pbf-active-scene-row {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px dashed rgba(63, 63, 70, 0.5); /* zinc-700 / 50% */
+}
+.nn-pbf-active-scene-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: #a1a1aa; /* zinc-400 */
+}
+.nn-pbf-active-scene-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent-500, #a78bfa) 60%, transparent);
+  background-color: color-mix(in srgb, var(--color-accent-700, #7c3aed) 30%, transparent);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+.nn-pbf-active-scene-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.12s;
+  background: transparent;
+  border: none;
+}
+.nn-pbf-active-scene-chip-btn:hover {
+  background-color: color-mix(in srgb, var(--color-accent-700, #7c3aed) 45%, transparent);
+}
+.nn-pbf-active-scene-chip-x {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.125rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  line-height: 1;
+  border-radius: 9999px;
+  color: var(--color-accent-300, #c4b5fd);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.12s, color 0.12s;
+}
+.nn-pbf-active-scene-chip-x:hover {
+  color: #ffffff;
+  background-color: color-mix(in srgb, var(--color-accent-700, #7c3aed) 60%, transparent);
+}
+
+.nn-pbf-context-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: 18px;
+  padding: 0 0.5rem;
+  border-radius: 9px;
+  font-size: 10.5px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.12s, color 0.12s, border-color 0.12s, opacity 0.12s;
+  background-color: transparent;
+  color: #a1a1aa; /* zinc-400 */
+  border: 1px solid rgba(63, 63, 70, 0.7); /* zinc-700 / 70% */
+  white-space: nowrap;
+}
+.nn-pbf-context-pill:hover:not(:disabled) {
+  color: #e4e4e7; /* zinc-200 */
+  border-color: color-mix(in srgb, var(--color-accent-500, #a78bfa) 50%, transparent);
+}
+.nn-pbf-context-pill-on {
+  background-color: color-mix(in srgb, var(--color-accent-700, #7c3aed) 30%, transparent);
+  border-color: color-mix(in srgb, var(--color-accent-500, #a78bfa) 60%, transparent);
+  color: var(--color-accent-200, #ddd6fe);
+}
+.nn-pbf-context-pill-on:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-accent-700, #7c3aed) 45%, transparent);
+  border-color: color-mix(in srgb, var(--color-accent-500, #a78bfa) 80%, transparent);
+}
+.nn-pbf-context-pill:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+/* Strip gets a tiny inline gap between pills (and from the collapse
+ * caret) — keeps the visual rhythm consistent if item 7 adds
+ * additional manually-attached context pills here later. */
+.nn-pbf-context-strip {
+  /* v0.2.9.44 — strip is now a vertical stack of named sub-rows
+   * (active scene chip, manual pinned pills, implicit toggles).
+   * Each sub-row uses its own flex-wrap inside for horizontal
+   * wrapping. Column-direction at the strip level lets us give the
+   * implicit-toggles row a distinct treatment (see below). */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.25rem;
+  min-width: 0;
+  flex: 1;
+}
+.nn-pbf-pinned-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+/* Implicit-context toggles row (Section / Selection / Description +
+ * Before / After). Always-present-but-toggleable pills get a smaller
+ * corner radius than the manual-attach pills above to telegraph the
+ * "this is implicit context for this surface" role at a glance. */
+.nn-pbf-implicit-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+.nn-pbf-implicit-row .nn-pbf-context-pill {
+  border-radius: 4px;
+}
+
+/* Phase 2.10b item 3 — unified dynamic-pill visual style.
+ *
+ * Applied to every pill (Tier 1 surface-intrinsic + Tier 2 attached)
+ * whose target reference resolves dynamically against host context.
+ * Composes WITH other pill chrome (background colour, padding, etc.) —
+ * does NOT replace it. Existing chip components opt in by adding the
+ * `nn-pill-dynamic` class alongside whatever else they already have.
+ *
+ * Three visual signals (planning doc §4.1):
+ *   - italic label text
+ *   - dashed border (replaces the solid border on whatever surface
+ *     pill style is otherwise in use)
+ *   - leading bolt icon — supplied by the <DynamicBoltIcon> SVG
+ *     component (not a CSS pseudo-element, because the icon needs
+ *     the story's accent_color and CSS can't read Zustand state)
+ *
+ * The dashed border styling is implemented as `border-style: dashed`
+ * + `border-width: 1px` so chips with no explicit border become
+ * dashed-bordered; chips with their own border have their border
+ * style overridden to dashed at the same width. Composes cleanly
+ * with `.nn-pbf-implicit-row .nn-pbf-context-pill`'s 4px corner
+ * radius (Tier 1 surface-intrinsic) and the default 6px+ of Tier 2
+ * attached pills — both visually distinguish dashed-bordered from
+ * solid-bordered.
+ */
+.nn-pill-dynamic {
+  font-style: italic;
+  border-style: dashed !important;
+  border-width: 1px;
+}
+
+/* Silent-skip state (planning doc §4.4e). Pill stays present in the
+ * UI when its target dependencies aren't met (per the §4.4c table),
+ * but renders with strike-through styling matching the existing
+ * `line-through italic text-red-400` pattern used at
+ * ConversationView.jsx:3682 for stale anchor states. */
+.nn-pill-dynamic-silent-skip {
+  text-decoration: line-through;
+  color: #f87171; /* red-400 — matches the existing precedent */
+  opacity: 0.7;
+}
+
+/* PlaceholderPillEditor — Phase 2.11a item 3. Inline pill style for
+ * `{{name}}` placeholder atoms rendered inside the placeholder-pill
+ * editor (used by the Persona Preamble editor in Phase 2.11a item 4
+ * and any future placeholder-bearing surface).
+ *
+ * Composes with `.nn-pill-dynamic` (italic + dashed border) for the
+ * dynamic-pill visual identity. Adds inline-block layout, padding,
+ * rounded corners, and the accent-coloured tint so the pill reads
+ * as a distinct atom inside surrounding plain text.
+ */
+.nn-placeholder-pill {
+  display: inline-block;
+  padding: 0 0.4rem;
+  margin: 0 0.1rem;
+  border-radius: 4px;
+  color: rgb(216 180 254);          /* purple-300 */
+  background-color: rgba(168, 85, 247, 0.10);
+  border-color: rgb(126 34 206);    /* purple-700 — overrides the base
+                                     * border colour from .nn-pill-dynamic */
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+  user-select: none;                /* the inner text is structural, not
+                                     * selectable as text — TipTap still
+                                     * allows whole-pill selection via
+                                     * NodeSelection */
+  white-space: nowrap;
+}
+
+/* Editor surface — minimal styling so host UIs can layer their own
+ * visual treatment (borders, focus rings, etc.) without conflicting.
+ * Font size matches the rest of the Settings panel (~11-12px) rather
+ * than inheriting the default 14-16px body text. */
+.nn-placeholder-pill-editor .ProseMirror {
+  outline: none;
+  padding: 0.4rem 0.5rem;
+  font-size: 11px;
+  color: rgb(228 228 231);          /* zinc-200 */
+  line-height: 1.55;
+}
+.nn-placeholder-pill-editor .ProseMirror p {
+  margin: 0;
+}
+
+/* Hover-popover above each context pill containing the word-count
+ * slider + click-to-edit custom-value input. Portaled to body so it
+ * overflows the form's bounds cleanly. */
+.nn-pbf-context-popover {
+  z-index: 60;
+  min-width: 180px;
+  background-color: #18181b; /* zinc-900 */
+  border: 1px solid color-mix(in srgb, var(--color-accent-500, #a78bfa) 60%, transparent);
+  border-radius: 4px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  font-size: 11px;
+  color: #d4d4d8; /* zinc-300 */
+}
+.nn-pbf-context-popover-slider {
+  width: 100%;
+  margin: 2px 0;
+  accent-color: var(--color-accent-500, #a78bfa);
+}
+.nn-pbf-context-popover-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.nn-pbf-context-popover-count-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--color-accent-200, #ddd6fe);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: text;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-align: center;
+  transition: border-color 0.12s, background-color 0.12s;
+  width: 100%;
+}
+.nn-pbf-context-popover-count-btn:hover:not(:disabled) {
+  border-color: rgba(63, 63, 70, 0.7);
+  background-color: rgba(39, 39, 42, 0.5);
+}
+.nn-pbf-context-popover-count-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.nn-pbf-context-popover-input {
+  width: 100%;
+  background-color: rgba(24, 24, 27, 0.8);
+  border: 1px solid color-mix(in srgb, var(--color-accent-500, #a78bfa) 70%, transparent);
+  color: #f4f4f5;
+  border-radius: 3px;
+  font-size: 11px;
+  padding: 2px 6px;
+  text-align: center;
+  outline: none;
+}
+.nn-pbf-caret {
+  color: #52525b; /* zinc-600 */
+}
+.nn-pbf-collapsed-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nn-pbf-streaming-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  /* Pulse ring around the spinner. Tracks the story accent via
+   * `color-mix` instead of a hardcoded RGB tuple so per-story
+   * accent overrides (`useAccentColor`) flow through. */
+  border: 2px solid color-mix(in srgb, var(--color-accent-700, #7c3aed) 40%, transparent);
+  border-top-color: var(--color-accent-500, #a78bfa);
+  animation: nn-pbf-spin 0.7s linear infinite;
+}
+@keyframes nn-pbf-spin {
+  to { transform: rotate(360deg); }
+}
+.nn-pbf-error-indicator {
+  color: #f87171; /* red-400 */
+  font-weight: 700;
+  font-family: monospace;
+  padding: 0 0.25rem;
+}
+
+.nn-pbf-expanded {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.375rem 0.5rem;
+  background-color: rgba(39, 39, 42, 0.4); /* zinc-800 / 40% */
+  border-bottom: 1px solid rgba(63, 63, 70, 0.4);
+}
+
+/* Composer row mirrors the chat composer's structure: textarea on
+ * the left taking the available space, fixed-width Send button
+ * column on the right. */
+.nn-pbf-composer-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.375rem;
+}
+.nn-pbf-message {
+  flex: 1;
+  min-width: 0;
+  background-color: rgba(24, 24, 27, 0.6); /* zinc-900 / 60% */
+  border: 1px solid rgba(63, 63, 70, 0.6);
+  color: #e4e4e7;
+  padding: 0.375rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  min-height: 52px;
+  max-height: 180px;
+}
+.nn-pbf-message:focus {
+  border-color: var(--color-accent-500, #a78bfa);
+}
+.nn-pbf-message:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.nn-pbf-send-col {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex-shrink: 0;
+  width: 52px;
+}
+.nn-pbf-send-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  background-color: var(--color-accent-700, rgba(124, 58, 237, 0.7));
+  border: 1px solid var(--color-accent-500, #a78bfa);
+  color: #fafafa;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.nn-pbf-send-btn:hover:not(:disabled) {
+  background-color: var(--color-accent-600, rgba(124, 58, 237, 0.85));
+}
+.nn-pbf-send-btn:disabled {
+  /* Match the chat composer's `disabled:opacity-40` — fade the accent
+   * rather than switching to grey so the writer reads it as the same
+   * button in a "not ready" state, not a different control. */
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.nn-pbf-stop-btn {
+  /* Match the chat composer's in-flight Stop button exactly:
+   * bg-red-900/50, border-red-800/60, text-red-100. */
+  background-color: rgba(127, 29, 29, 0.5); /* red-900 / 50% */
+  border-color: rgba(153, 27, 27, 0.6);     /* red-800 / 60% */
+  color: #fee2e2;                            /* red-100 */
+}
+.nn-pbf-stop-btn:hover {
+  background-color: rgba(127, 29, 29, 0.7); /* red-900 / 70% */
+}
+
+/* Toolbar row below the composer — small icon buttons (mirrors
+ * the chat composer's InputToolbarRow chrome). */
+.nn-pbf-toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.nn-pbf-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: rgba(39, 39, 42, 0.4); /* zinc-800 / 40% */
+  border: 1px solid rgba(63, 63, 70, 1); /* zinc-700 */
+  border-radius: 3px;
+  color: #a1a1aa; /* zinc-400 */
+  transition: background-color 0.12s, border-color 0.12s, color 0.12s;
+  cursor: pointer;
+}
+.nn-pbf-icon-btn:hover:not(:disabled):not(.nn-pbf-icon-btn-active) {
+  color: #f4f4f5;
+  background-color: rgba(63, 63, 70, 0.6);
+}
+.nn-pbf-icon-btn-active {
+  /* Story-accent-aware active state (gear / settings / context
+   * buttons when their popovers are open). `color-mix` lets us
+   * blend the var-resolved accent with transparency, so per-story
+   * accent overrides flow through. Earlier rev hardcoded the
+   * `rgba(124, 58, 237, …)` / `rgba(91, 33, 182, …)` tuples,
+   * which painted purple regardless of the writer's chosen accent. */
+  border-color: color-mix(in srgb, var(--color-accent-700, #7c3aed) 60%, transparent);
+  background-color: color-mix(in srgb, var(--color-accent-900, #581c87) 30%, transparent);
+  color: var(--color-accent-200, #ddd6fe);
+}
+.nn-pbf-icon-btn-disabled,
+.nn-pbf-icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.nn-pbf-collapse-btn-tb {
+  background: transparent;
+  border: 1px solid rgba(63, 63, 70, 0.6);
+  color: #a1a1aa; /* zinc-400 */
+  padding: 0 6px;
+  height: 20px;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  margin-left: auto;
+}
+.nn-pbf-collapse-btn-tb:hover:not(:disabled) {
+  background-color: rgba(63, 63, 70, 0.6);
+  color: #f4f4f5;
+}
+.nn-pbf-collapse-btn-tb:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nn-pbf-error-message {
+  flex: 1;
+  color: #f87171; /* red-400 */
+  font-size: 0.6875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Phase 2.9c item 2 — Inline Prompt Block floating chrome.
+ * Renders the shared PromptBlockForm portaled to body. Floats over
+ * the editor at the chrome position set by the toolbar IPB button's
+ * cascade (IPB prior anchor → writer's native cursor → top of
+ * editor viewport). Drag-handle wiring lands in item 6; for v1 it's
+ * a decorative chrome row above the form. */
+.nn-ipb {
+  z-index: 50;
+  width: 480px;
+  max-width: calc(100vw - 24px);
+  background-color: #18181b; /* zinc-900 */
+  border: 1px solid var(--color-accent-700, rgba(124, 58, 237, 0.6));
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.nn-ipb-chrome-row {
+  display: flex;
+  align-items: center;
+  padding: 0.125rem 0.375rem;
+  background-color: rgba(63, 63, 70, 0.4); /* zinc-700 / 40% */
+  border-bottom: 1px solid rgba(63, 63, 70, 0.6);
+  border-radius: 6px 6px 0 0;
+  font-size: 0.75rem;
+}
+.nn-ipb-drag-handle {
+  cursor: grab;
+  color: #71717a; /* zinc-500 */
+  padding: 0 4px;
+  user-select: none;
+}
+.nn-ipb-drag-handle:active {
+  cursor: grabbing;
+}
+.nn-ipb-chrome-spacer {
+  flex: 1;
+}
+.nn-ipb-close-btn {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(39, 39, 42, 0.4);
+  border: 1px solid rgba(63, 63, 70, 0.6);
+  border-radius: 3px;
+  color: #a1a1aa; /* zinc-400 */
+  cursor: pointer;
+  font-size: 0.875rem;
+  line-height: 1;
+  padding: 0;
+}
+.nn-ipb-close-btn:hover:not(:disabled) {
+  color: #fee2e2; /* red-100 */
+  background-color: rgba(127, 29, 29, 0.4); /* red-900 / 40% */
+  border-color: rgba(185, 28, 28, 0.6); /* red-700 / 60% */
+}
+.nn-ipb-close-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* IPB anchor decorations painted by IpbAnchorDecoration.jsx so the
+ * writer always sees what the IPB is targeting, separate from the
+ * browser-native cursor. Story-accent so it reads as "AI surface"
+ * not "writer typing surface".
+ *
+ * Cursor mode is rendered as a portal'd `position: fixed` div in
+ * `InlinePromptBlock` (NOT a ProseMirror widget decoration). Two
+ * reasons we moved the cursor OUT of the editor's DOM:
+ *   1. The browser's spell checker treated the surrounding text as
+ *      two separate words when a `<span>` was inserted between
+ *      characters (`hel<span/>lo` → "hel" + "lo"), red-squiggling
+ *      correctly-spelled words mid-cursor.
+ *   2. At block boundaries, the inline-block widget triggered an
+ *      anonymous line box, painting as a phantom blank line.
+ * Range mode stays as an inline decoration — it spans content, doesn't
+ * split text, and the browser is happy to spell-check across it. */
+.nn-ipb-anchor-cursor-floating {
+  width: 2px;
+  background-color: var(--color-accent-500, #a78bfa);
+  /* Blinking matches the browser-native cursor convention but at a
+   * slightly slower rate so the two cursors don't strobe in sync. */
+  animation: nn-ipb-cursor-blink 1.1s steps(1, end) infinite;
+  pointer-events: none;
+  z-index: 45;
+}
+@keyframes nn-ipb-cursor-blink {
+  50% { opacity: 0; }
+}
+.nn-ipb-anchor-range {
+  /* Section-mode anchor range tint — story-accent at low alpha via
+   * color-mix so it tracks the writer's chosen accent (the
+   * `--color-accent-500` palette var is overridden per-story via
+   * `useAccentColor`). The fallback hex is the default purple-500. */
+  background-color: color-mix(in srgb, var(--color-accent-500, #a855f7) 22%, transparent);
+  border-radius: 2px;
+}
+
+/* Collapsed-streaming pin — the IPB's inverted-teardrop / map-pin
+ * visual from planning doc §4.10. Replaces the normal 480px-wide
+ * chrome+form when the IPB is streaming AND collapsed. Dimensions
+ * (26w × 36h) MUST match PIN_WIDTH / PIN_HEIGHT in
+ * IpbAnchorDecoration.computeIpbChromePos so the pin's bottom-edge
+ * tip lands exactly at the IPB anchor's top edge. Single SVG path
+ * carries both the dark fill and the accent stroke; the spinning
+ * coin overlays the head's center. */
+.nn-ipb-streaming-pin {
+  z-index: 50;
+  width: 26px;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  /* Subtle accent-coloured glow + a soft black drop for elevation.
+   * `drop-shadow` (vs `box-shadow`) traces the SVG path's actual
+   * silhouette, so the glow follows the teardrop's outline rather
+   * than painting a rectangular halo around the button's bounding
+   * box. Two stacked accent shadows build up a gentle aura at
+   * different blur radii; the trailing dark shadow provides the
+   * "lifted off the prose" depth cue. */
+  filter:
+    drop-shadow(0 0 3px color-mix(in srgb, var(--color-accent-500, #a78bfa) 65%, transparent))
+    drop-shadow(0 0 7px color-mix(in srgb, var(--color-accent-500, #a78bfa) 40%, transparent))
+    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
+}
+.nn-ipb-streaming-pin-shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: block;
+}
+/* Coin overlay — sized + positioned to cover the head's bounding
+ * region in the SVG viewBox. The head's geometric centre sits at
+ * (13, 12) in the 26×36 viewBox; a 26×24 box anchored at top:0
+ * places its centre at (13, 12) too, so the flex-centred coin
+ * lands on the head's centre. */
+.nn-ipb-streaming-pin-coin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent-300, #c4b5fd);
+  font-size: 11px;
+  pointer-events: none;
+}
+/* The chat composer's `.nn-streaming-coin` carries
+ * `margin-left: 0.15em` + `vertical-align: -0.15em` for inline
+ * placement next to text in chat bubbles. Inside the pin's flex
+ * container those offsets push the coin off-centre to the right
+ * and downward. Override both so the coin sits in the head's
+ * geometric centre. */
+.nn-ipb-streaming-pin-coin .nn-streaming-coin {
+  margin-left: 0;
+  vertical-align: baseline;
+}
+.nn-ipb-streaming-pin:hover .nn-ipb-streaming-pin-shape path {
+  /* Brighten the border on hover so the writer sees the pin is
+   * interactive (click to expand). */
+  stroke: var(--color-accent-400, #a78bfa);
+}
+
+.nn-section-toolbar {
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(63, 63, 70, 0.6);
+  background-color: rgba(24, 24, 27, 0.3);
+}
+
+.nn-section-action {
+  background-color: transparent;
+  border: 1px solid rgba(63, 63, 70, 0.6);
+  color: #d4d4d8; /* zinc-300 */
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 0.6875rem;
+  cursor: pointer;
+  transition: background-color 0.12s, border-color 0.12s, color 0.12s;
+}
+.nn-section-action:hover:not(:disabled) {
+  background-color: rgba(63, 63, 70, 0.6);
+  border-color: var(--color-accent-500);
+  color: #f4f4f5;
+}
+.nn-section-action:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Icon-only action variant (Attach to Chat etc.) — tighter horizontal
+   padding so the 14x14 glyph isn't surrounded by text-sized whitespace. */
+.nn-section-action.nn-section-action-icon {
+  padding: 2px 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Destructive action variant (Delete) — matches the message-bubble
+   trash button's theme: zinc tones at rest (reads as a normal action
+   button), red tint only on hover so the writer's hover feedback
+   distinguishes it from non-destructive neighbours. Right-edge
+   alignment for the remove-this-Section pair is carried by the
+   preceding sibling (Dissolve) via inline `marginLeft: 'auto'`. */
+.nn-section-action.nn-section-action-destructive {
+  color: #a1a1aa; /* zinc-400 — same as MessageBubble.jsx IconButton */
+  background-color: rgba(39, 39, 42, 0.4); /* zinc-800 / 40% */
+  border-color: rgb(63, 63, 70); /* zinc-700 */
+}
+.nn-section-action.nn-section-action-destructive:hover:not(:disabled) {
+  background-color: rgba(127, 29, 29, 0.4); /* red-900 / 40% */
+  border-color: rgba(185, 28, 28, 0.6); /* red-700 / 60% */
+  color: #fecaca; /* red-200 */
+}
+
+.nn-section-content {
+  padding: 0.5rem 0.75rem;
+}
+
+/* Phase 2.9a item 7 — Scene Description Section. Bespoke editing UI
+   for `scene.description` above the TipTap main_content editor.
+   Tinted accent background (no border) so the body reads as part of
+   the editor panel rather than a separately-bordered Section. The
+   toggle lives in the editor header row (next to the close button);
+   only the body lives below the header. The inner DescriptionEditor
+   (label + bordered/rounded textarea) is reused from the shared
+   detail-panel component so the editing surface matches the writer's
+   muscle-memory from the entity / scene detail panels in the left
+   sidebar. */
+.nn-scene-desc-body {
+  background-color: color-mix(in srgb, var(--color-accent-500) 10%, transparent);
+  border-radius: 6px;
+  padding: 0.75rem 0.875rem;
+  margin: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Prompt Block Header placeholder row — same chrome pattern as the
+   Section UI placeholder (Phase 2.9a item 2). Full wiring in 2.9d. */
+.nn-scene-desc-pbh-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  color: #71717a;
+  font-style: italic;
+  border-radius: 3px;
+  background-color: rgba(39, 39, 42, 0.5);
+  user-select: none;
+}
+.nn-scene-desc-pbh-caret { color: #52525b; }
+.nn-scene-desc-pbh-label { color: #a1a1aa; font-style: normal; }
+.nn-scene-desc-pbh-stub-note {
+  font-size: 0.6875rem;
+  color: #52525b;
+}
+.nn-scene-desc-action {
+  background-color: transparent;
+  border: 1px solid rgba(63, 63, 70, 0.6);
+  color: #d4d4d8;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 0.6875rem;
+  cursor: pointer;
+  transition: background-color 0.12s, border-color 0.12s, color 0.12s;
+}
+.nn-scene-desc-action:hover:not(:disabled) {
+  background-color: rgba(63, 63, 70, 0.6);
+  border-color: var(--color-accent-500);
+  color: #f4f4f5;
+}
+.nn-scene-desc-action:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* TipTap wraps content in .tiptap — ensure it fills the container.
+   Phase 2.9a item 10 — read-aid zoom: the editor container sets
+   `--nn-editor-zoom` (defaults to 1 = 100%); .tiptap multiplies its
+   own font-size by that variable. Prose descendants without an
+   explicit font-size inherit. Chrome elements inside .tiptap (Section
+   UI rows, PBH placeholders, action buttons, etc.) use rem / px
+   font-sizes that are immune to the local em cascade, so they stay
+   fixed-size while only the prose scales. */
+.tiptap {
+  min-height: 100%;
+  font-size: calc(1em * var(--nn-editor-zoom, 1));
+}
+
+/* Phase 2.9a item 10 — slim slider styling for the editor footer's
+   read-aid zoom control. Native `input[type=range]` defaults are too
+   thick for a footer-bar control; custom thin track + small thumb in
+   the story accent. Targeted by class so the standard sliders
+   elsewhere (e.g. Program Settings tab) keep their default size. */
+.nn-editor-zoom-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 12px;
+  width: 96px;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+.nn-editor-zoom-slider:focus {
+  outline: none;
+}
+.nn-editor-zoom-slider::-webkit-slider-runnable-track {
+  height: 2px;
+  background: rgba(82, 82, 91, 0.8); /* zinc-600 / 80% */
+  border-radius: 2px;
+}
+.nn-editor-zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-accent-500);
+  margin-top: -4px; /* center thumb on the 2px track */
+  border: none;
+  cursor: pointer;
+}
+.nn-editor-zoom-slider::-moz-range-track {
+  height: 2px;
+  background: rgba(82, 82, 91, 0.8);
+  border-radius: 2px;
+  border: none;
+}
+.nn-editor-zoom-slider::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-accent-500);
+  border: none;
+  cursor: pointer;
+}
+
+.tiptap:focus {
+  outline: none;
+}
+
+/* ── Media Preview tray-chip equalizer indicator ─────────────────────────────
+   4-column x 3-row dot equalizer. Each column has 3 dots (bottom, mid, top).
+   The bottom dot is always lit while playing. Mid and top dots animate with
+   staggered per-column delays to suggest oscillation. When paused, no
+   animation runs and all dots sit at a dimmed flat level.                    */
+
+.eq-dot {
+  display: block;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+@keyframes eq-mid-kf {
+  0%, 100% { opacity: 0.2; }
+  30%, 70% { opacity: 1; }
+}
+
+@keyframes eq-top-kf {
+  0%, 100% { opacity: 0.15; }
+  50%      { opacity: 1; }
+}
+
+.eq-playing .eq-dot-bot { opacity: 1; }
+.eq-playing .eq-dot-mid { animation: eq-mid-kf 1.2s infinite ease-in-out; }
+.eq-playing .eq-dot-top { animation: eq-top-kf 1.2s infinite ease-in-out; }
+
+.eq-paused .eq-dot-bot { opacity: 0.4; }
+.eq-paused .eq-dot-mid { opacity: 0.4; }
+.eq-paused .eq-dot-top { opacity: 0.4; }
+
+/* Phase 1.11 — flash on the right edge of the final act when the user
+   clicks Add Act but every chapter is already in an act. Red border with
+   a glowing box-shadow that fades out over ~2s, signalling "can't add
+   another act without freeing up a chapter first". */
+@keyframes nn-act-add-blocked-flash {
+  0%   { opacity: 1; box-shadow: 0 0 14px 6px rgba(239, 68, 68, 0.85); }
+  60%  { opacity: 0.8; box-shadow: 0 0 10px 4px rgba(239, 68, 68, 0.55); }
+  100% { opacity: 0; box-shadow: 0 0 2px 1px rgba(239, 68, 68, 0); }
+}
+.nn-act-add-blocked-flash {
+  animation: nn-act-add-blocked-flash 2s ease-out forwards;
+}
+
+/* Phase 1.11 Track I — distinct outline on nodes during an active
+   multi-selection. When more than one node is selected, each selected
+   node's React Flow wrapper (`.react-flow__node.selected`) gets a
+   dashed amber outline instead of the default single-selection look.
+   Signals to the user that this is a batch/group operation state and
+   is visually distinct from the single-node "active in sidebar"
+   outline that scene/entity nodes use for their own detail-panel link.
+   Gated by a parent class set on the canvas wrapper so the selector
+   only fires when multi-select is actually active. */
+/* Phase 1.11 Track I — React Flow's NodesSelection overlay (a box
+   that wraps all multi-selected nodes, intended as a drag handle) is
+   hidden. It sits over the selected nodes with its own event capture,
+   which intercepted Ctrl+clicks and broke the in/out toggle. Multi-
+   node drag still works without it — React Flow propagates a drag on
+   any selected node to all selected nodes, so users can drag any
+   member of the selection to move the whole group. */
+.react-flow__nodesselection {
+  display: none !important;
+}
+
+/* Phase 1.11 Track I — generic group container click + drag behaviour.
+   The group's React Flow wrapper must be click-transparent everywhere
+   EXCEPT the header drag handle and the resize control, so the user can
+   click / drag scene nodes visually inside the group without the group
+   intercepting them. Groups must also always render BEHIND other nodes
+   (including when selected), so z-index is forced to a low value with
+   !important to beat React Flow's selection z-index bump. */
+.react-flow__node-genericGroupNode {
+  pointer-events: none !important;
+  z-index: -1 !important;
+}
+.react-flow__node-genericGroupNode .nn-group-drag-handle,
+.react-flow__node-genericGroupNode .react-flow__resize-control {
+  pointer-events: auto;
+}
+.react-flow__node-genericGroupNode .nn-group-drag-handle {
+  cursor: grab;
+}
+.react-flow__node-genericGroupNode .nn-group-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Phase 2.3a — dock drop-target pulse glow. Reads the accent colour via
+ * `--dock-target-glow` (set per-instance from the story accent), so the
+ * keyframe stays accent-agnostic. The animation pulses the box-shadow
+ * between a soft and brighter glow on a slow ~1.8s cycle so the visible
+ * drop zones gently draw the writer's eye during a tab drag. Applied
+ * with class `.nn-dock-target-pulse` from `DockDropTargets.jsx`. */
+@keyframes nn-dock-target-pulse {
+  0%, 100% {
+    box-shadow: 0 0 6px 1px var(--dock-target-glow, rgba(124, 58, 237, 0.35));
+  }
+  50% {
+    box-shadow: 0 0 14px 3px var(--dock-target-glow, rgba(124, 58, 237, 0.65));
+  }
+}
+.nn-dock-target-pulse {
+  animation: nn-dock-target-pulse 1.8s ease-in-out infinite;
+}
+
+/* Phase 6.2 — help mode (click-to-inspect) cursor. While active, every
+   element shows the help cursor so it reads as "the next click inspects,
+   it does not act". Toggled by `body.help-mode-active` from
+   HelpModeController. */
+body.help-mode-active,
+body.help-mode-active * {
+  cursor: help !important;
+}
+/* The Help button reads as "armed" while help mode is on. The one-shot mode
+   is brief, but the ring confirms the click registered as entering it. */
+body.help-mode-active [data-help-region="menu-bar:help"] {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85);
+}
+
+/* ── Tool-call "using tool" active chip ────────────────────────────
+ * Applied to the latest tool-call chip while a call is running so
+ * the writer can see at a glance that the AI is currently working.
+ * Two layers:
+ *   1. `.nn-tool-active` adds a soft accent-coloured glow that
+ *      gently pulses; conveys "this is alive" without screaming.
+ *   2. `.nn-tool-active::before` lays a conic-gradient ring on top
+ *      of the border that rotates around the chip — visually reads
+ *      as two pulses chasing each other around the perimeter (the
+ *      gradient has two highlights 180° apart so a full rotation
+ *      shows the writer two complete passes).
+ * The active accent colour is supplied by the consumer via
+ * `--tool-active-accent`; the default is a fallback violet so the
+ * effect still looks reasonable if the story accent isn't wired up.
+ *
+ * Custom property `--tool-active-angle` is registered with
+ * `@property` so it can be animated — required by every browser
+ * that supports it; older browsers fall back to the static glow
+ * + pulse without the travelling highlight, which is still fine. */
+@property --tool-active-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes nn-tool-active-glow {
+  0%, 100% { box-shadow: 0 0 6px 1px var(--tool-active-accent, rgba(124, 58, 237, 0.4)); }
+  50%      { box-shadow: 0 0 14px 3px var(--tool-active-accent, rgba(124, 58, 237, 0.75)); }
+}
+@keyframes nn-tool-active-trace {
+  to { --tool-active-angle: 360deg; }
+}
+.nn-tool-active {
+  position: relative;
+  isolation: isolate;
+  animation: nn-tool-active-glow 1.8s ease-in-out infinite;
+}
+/* ── Favourites-strip target highlight ─────────────────────────
+ * Brief accent-coloured glow applied to a message bubble when the
+ * writer clicks its chip in the favourites strip. Class is added
+ * imperatively by the strip click handler and removed after the
+ * animation completes (~1.6s). `--message-highlight-accent` should
+ * be set inline on the element to whatever the active story accent
+ * is so the glow matches the rest of the panel chrome. */
+@keyframes nn-message-highlight {
+  0%   { box-shadow: 0 0 0 0 var(--message-highlight-accent, rgba(124, 58, 237, 0)); }
+  20%  { box-shadow: 0 0 18px 4px var(--message-highlight-accent, rgba(124, 58, 237, 0.85)); }
+  100% { box-shadow: 0 0 0 0 var(--message-highlight-accent, rgba(124, 58, 237, 0)); }
+}
+.nn-message-highlight {
+  animation: nn-message-highlight 1.6s ease-out;
+  border-radius: 0.5rem;
+}
+
+/* Story Library project-card expand / collapse (accordion). The CLIP
+   element animates its max-width (and fades) while the details panel INSIDE
+   it stays a fixed width (w-72 = 18rem), so the content slides out from the
+   cover's right edge instead of reflowing as the box grows. `open` plays on
+   mount; `close` plays on collapse (the panel is kept mounted until the
+   close animation ends, then unmounted). The max-width target matches the
+   panel width. */
+.nn-accordion-clip {
+  overflow: hidden;
+}
+@keyframes nn-accordion-open {
+  from { opacity: 0; max-width: 0; }
+  to   { opacity: 1; max-width: 18rem; }
+}
+@keyframes nn-accordion-close {
+  from { opacity: 1; max-width: 18rem; }
+  to   { opacity: 0; max-width: 0; }
+}
+.nn-accordion-open {
+  animation: nn-accordion-open 200ms ease-out;
+}
+.nn-accordion-close {
+  animation: nn-accordion-close 180ms ease-in forwards;
+}
+
+/* Chat pinned-context chip flash. Fires once when the chat composer's
+   detection scanner notices the writer has deleted the LAST name /
+   alias for a pinned object from the input. Two amber pulses with a
+   small gap so a writer who looked away catches the second one even
+   if they missed the first. Quiet enough not to compete with the
+   panel's accent-coloured affordances. */
+@keyframes nn-chat-pill-flash {
+  0%   { box-shadow: 0 0 0 0 transparent; }
+  15%  { box-shadow: 0 0 10px 3px color-mix(in srgb, var(--nn-pill-flash-colour, #fbbf24) 85%, transparent); }
+  35%  { box-shadow: 0 0 0 0 transparent; }
+  55%  { box-shadow: 0 0 10px 3px color-mix(in srgb, var(--nn-pill-flash-colour, #fbbf24) 85%, transparent); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.nn-chat-pill-flash {
+  animation: nn-chat-pill-flash 1.4s ease-out;
+}
+
+/* Port accept-halo pulse. Used by PortHandle's drag-time overlay when
+   the candidate port accepts the dragged payload. Portal-rendered into
+   the React Flow outer node wrapper so it escapes the inner node's
+   `overflow: hidden` clip (the port sits on the node's edge — without
+   the portal, half the halo gets chopped off). Slow breathing pulse
+   so the affordance reads as "this port is live and waiting" rather
+   than a static flat ring. */
+@keyframes nn-port-halo-pulse {
+  0%   { transform: translate(-50%, -50%) scale(0.85); opacity: 0.55; }
+  50%  { transform: translate(-50%, -50%) scale(1.15); opacity: 1.00; }
+  100% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.55; }
+}
+.nn-port-halo {
+  position: absolute;
+  pointer-events: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  /* Colour driven by `--nn-port-halo-colour` (set inline from the
+     story accent so writers see their own theme tint). Fallback to
+     accent-purple #a855f7 if the variable isn't set. `color-mix`
+     lets us derive transparent stops from any input colour without
+     parsing it into r/g/b. */
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--nn-port-halo-colour, #a855f7) 55%, transparent) 0%,
+    color-mix(in srgb, var(--nn-port-halo-colour, #a855f7) 35%, transparent) 45%,
+    color-mix(in srgb, var(--nn-port-halo-colour, #a855f7) 0%,  transparent) 75%
+  );
+  animation: nn-port-halo-pulse 1.6s ease-in-out infinite;
+  z-index: 9;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nn-port-halo {
+    animation: none;
+    transform: translate(-50%, -50%) scale(1.0);
+    opacity: 0.8;
+  }
+}
+
+/* Chat streaming indicator — a ring rotating on its vertical axis,
+   evocative of a coin spinning on edge. Two synced animations on a
+   shared 1.4s period:
+     - the SVG ring rotates rotateY 0→360°; with the parent's
+       perspective this reads as 3D when face-on and foreshortens
+       through edge-on twice per rotation.
+     - the parent's drop-shadow glow pulses brightest at face-on
+       (when the full disc catches light) and dims at edge-on
+       (when the disc presents only its rim). Two glow peaks per
+       rotation. */
+@keyframes nn-streaming-coin-kf {
+  0%   { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+@keyframes nn-streaming-coin-glow-kf {
+  0%, 50%, 100% {
+    filter: drop-shadow(0 0 3px currentColor) drop-shadow(0 0 7px currentColor);
+  }
+  25%, 75% {
+    filter: drop-shadow(0 0 1px currentColor);
+  }
+}
+.nn-streaming-coin {
+  position: relative;
+  display: inline-block;
+  vertical-align: -0.15em;
+  width: 0.95em;
+  height: 0.95em;
+  perspective: 24px;
+  margin-left: 0.15em;
+  animation: nn-streaming-coin-glow-kf 1.4s ease-in-out infinite;
+}
+.nn-streaming-coin > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: nn-streaming-coin-kf 1.4s linear infinite;
+  transform-origin: center;
+}
+
+.nn-tool-active::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--tool-active-angle),
+    transparent 0deg,
+    var(--tool-active-accent, rgba(124, 58, 237, 0.95)) 30deg,
+    transparent 90deg,
+    transparent 180deg,
+    var(--tool-active-accent, rgba(124, 58, 237, 0.95)) 210deg,
+    transparent 270deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: nn-tool-active-trace 2.4s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Reasoning-button model-default hint ───────────────────────
+ * One-shot attention pulse fired when the writer switches to a
+ * model whose declared `reasoning_default` disagrees with the
+ * current per-thread reasoning-enabled state. Visually: a brief
+ * accent-coloured glow + a conic-gradient highlight tracing twice
+ * around the button border. Plays once and removes itself; the
+ * React component toggles the class via a timeout. The accent
+ * colour is supplied by the consumer via `--reasoning-hint-accent`
+ * inline so the effect matches the active story accent.
+ *
+ * Separate @property registration so the angle animation here
+ * doesn't collide with `--tool-active-angle` if both ever play on
+ * the same element. */
+@property --reasoning-hint-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes nn-reasoning-hint-spin {
+  to { --reasoning-hint-angle: 360deg; }
+}
+@keyframes nn-reasoning-hint-glow {
+  0%, 100% { box-shadow: 0 0 0 0 var(--reasoning-hint-accent, rgba(124, 58, 237, 0)); }
+  20%      { box-shadow: 0 0 10px 2px var(--reasoning-hint-accent, rgba(124, 58, 237, 0.7)); }
+  60%      { box-shadow: 0 0 14px 3px var(--reasoning-hint-accent, rgba(124, 58, 237, 0.85)); }
+}
+.nn-reasoning-hint {
+  position: relative;
+  isolation: isolate;
+  animation: nn-reasoning-hint-glow 2.4s ease-in-out 1;
+}
+.nn-reasoning-hint::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--reasoning-hint-angle),
+    transparent 0deg,
+    var(--reasoning-hint-accent, rgba(124, 58, 237, 0.95)) 60deg,
+    transparent 140deg,
+    transparent 220deg,
+    var(--reasoning-hint-accent, rgba(124, 58, 237, 0.95)) 300deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: nn-reasoning-hint-spin 1.2s linear 2;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Fading tooltip emitted alongside the spin to explain why the
+ * button is highlighting. Sits just above the button, fades in and
+ * out over the same ~2.4s window. */
+@keyframes nn-reasoning-hint-tip {
+  0%   { opacity: 0; transform: translate(-50%, 4px); }
+  15%  { opacity: 1; transform: translate(-50%, 0); }
+  85%  { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -2px); }
+}
+.nn-reasoning-hint-tip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  white-space: nowrap;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  line-height: 1.2;
+  color: #fafafa;
+  background: rgba(24, 24, 27, 0.95);
+  border: 1px solid rgba(82, 82, 91, 0.7);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  z-index: 50;
+  animation: nn-reasoning-hint-tip 2.4s ease-in-out 1;
+}

@@ -1,0 +1,44 @@
+# NarrativeNode — .gitignore (public release)
+#
+# Lean, release-specific ignore file. Covers only build artifacts and the
+# runtime state a normal run generates, so a fresh clone stays clean after
+# `python setup.py` + `python run.py`.
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Runtime logs
+logs/
+
+# Frontend build artifacts
+frontend/node_modules/
+frontend/dist/
+
+# Saved project files
+*.nnz
+*.nnplot
+
+# Runtime user state (created while the app runs)
+preferences/user_preferences.json
+preferences/default_seeds.json
+preferences/system_prompts_installed.json
+preferences/conversation_categories.json
+preferences/program_tag_colors.json
+preferences/ai_context_cues.json
+preferences/ai_provider_profiles/
+preferences/system_prompts/
+preferences/conversations/
+system_prompts/
+context_cues/
+conversations/
+/library/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,6 @@
+{
+  "id": "shipped-summarize-scene",
+  "name": "Summarize Scene",
+  "shipped": true,
+  "prompt": "You are summarizing a single scene. The writer needs a compact, useful note they can scan at a glance later — not prose. Write a short summary of what happens in the scene that captures the load-bearing facts and beats. Cover: which characters appear, where it takes place, what happens (the events in order), what changes by the end (new information, decisions, state changes, relationship shifts), and any unresolved threads that would matter later in the story. Plain text only — no markdown, no headers, no bullet points. Keep it tight: aim for one short paragraph, two at most. Write in the present tense. Do not editorialize, praise, or suggest improvements. Do not invent details that the scene does not show. If the scene is empty or ambiguous about something important, say so briefly rather than guess. Your output replaces the current scene description, so it must read cleanly as a standalone note."
+}

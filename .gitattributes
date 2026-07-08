@@ -1,0 +1,7 @@
+# NarrativeNode — .gitattributes (public release)
+#
+# backend/scripts/mcp_catalogue.json is regenerated at runtime by the
+# backend. Pin it to LF so a regeneration on any OS (Windows would
+# otherwise write CRLF) stays byte-identical to the committed copy and
+# never surfaces as a phantom local change that blocks `git pull`.
+backend/scripts/mcp_catalogue.json text eol=lf
